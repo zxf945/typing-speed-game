@@ -1,11 +1,7 @@
 {
- "endOfLine": "lf",
+  "endOfLine": "lf",
   "semi": false,
   "singleQuote": true,
   "tabWidth": 2,
-  "plugins": [
-    "prettier-plugin-organize-imports",
-    "@ianvs/prettier-plugin-sort-imports",
-    "prettier-plugin-tailwindcss"
-  ]
+  "plugins": ["prettier-plugin-tailwindcss"]
 }
