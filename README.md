@@ -48,3 +48,11 @@ export default tseslint.config({
   },
 })
 ```
+
+### [vite](https://cn.vite.dev/)
+
+### [tailwindcss](https://tailwindcss.com/docs/editor-setup)
+
+### [motion](https://motion.dev/docs/react-quick-start)
+
+### [react-icons](https://react-icons.github.io/react-icons/)
