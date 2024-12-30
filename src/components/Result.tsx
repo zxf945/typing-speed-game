@@ -16,7 +16,7 @@ const Result: React.FC<{
   }
   return (
     <motion.ul
-      className={`${className} flex flex-col items-center text-primary-500`}
+      className={`${className} flex flex-col items-center gap-6 text-primary-500`}
     >
       <motion.li initial={initial} animate={animate} transition={transition}>
         Results
