@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base{
-    body{
-        @apply min-h-screen bg-slate-800 grid place-items-center font-mono
-    }
+@layer base {
+  body {
+    @apply grid min-h-screen place-items-center bg-pink-100 font-mono dark:bg-slate-800;
+  }
 }
