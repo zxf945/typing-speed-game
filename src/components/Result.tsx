@@ -4,8 +4,7 @@ const Result: React.FC<{
   className?: string
   errors: number
   typed: number
-  total?: number
-}> = ({ className, errors, typed, total }) => {
+}> = ({ className, errors, typed }) => {
   const initial = {
     opacity: 0,
   }

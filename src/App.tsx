@@ -57,7 +57,6 @@ export default function App() {
       />
       <Result
         className="mt-10"
-        total={words.length}
         errors={countErrors(typed, words)}
         typed={totalTyped}
       />
