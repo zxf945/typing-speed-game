@@ -1,7 +1,7 @@
 import './App.css'
 import RestartButton from './components/RestartButton'
 import useWords from './hooks/userWords'
-import { countErrors, formatPercentage } from './utils/helpers'
+import { countErrors } from './utils/helpers'
 import Result from './components/Result'
 import CountDonwTimer from './components/CountDonwTimer'
 import UserInputMask from './components/UserInputMask'
@@ -10,13 +10,26 @@ import Words from './components/Words'
 import ModeSwitchButton from './components/ModeSwitchButton'
 import useCountTimer from './hooks/useCountTimer'
 import useTyping from './hooks/useTyping'
-import useTypeState from './hooks/useTypeState'
+import { useEffect } from 'react'
+
+const NUMBER_OF_WORDS = 10
 
 export default function App() {
-  const { words } = useWords(10)
-  const { typeState } = useTypeState('start')
+  const { words, updateWords } = useWords(NUMBER_OF_WORDS)
   const { leftTime, resetTimer } = useCountTimer(10)
-  const { typed } = useTyping(typeState != 'finish')
+  const { typed, isEnableTyping, clearTyped, totalTyped } = useTyping()
+  // useEffect(() => {
+  //   console.log('===111')
+  // }, [])
+  useEffect(() => {
+    if (typed.length === words.length) {
+      clearTyped()
+      updateWords()
+    }
+    if (leftTime === 0) {
+      isEnableTyping(false)
+    }
+  }, [typed, leftTime])
   return (
     <div className="relative flex min-h-screen flex-col justify-center">
       <ModeSwitchButton className="absolute right-4 top-4" />
@@ -32,13 +45,18 @@ export default function App() {
 
       <RestartButton
         className="align-center mx-auto mt-10"
-        onRestart={() => resetTimer()}
+        onRestart={() => {
+          resetTimer()
+          clearTyped()
+          updateWords()
+          isEnableTyping(true)
+        }}
       />
       <Result
         className="mt-10"
-        accuracyPercent={formatPercentage(100)}
+        total={words.length}
         errors={countErrors(typed, words)}
-        typed={typed.length}
+        typed={totalTyped}
       />
     </div>
   )

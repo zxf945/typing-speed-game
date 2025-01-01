@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 
 const keyIsAllow = (code: string): boolean => {
   return (
@@ -10,31 +10,32 @@ const keyIsAllow = (code: string): boolean => {
 }
 
 const useTyping = (
-  enable: boolean,
+  enable: boolean = true,
 ): {
   typed: string
-  index: number
-  setIndex: React.Dispatch<React.SetStateAction<number>>
+  isEnableTyping: (enable: boolean) => void
+  clearTyped: () => void
+  totalTyped: number
 } => {
   const [typed, setTyped] = React.useState<string>('')
-  const [index, setIndex] = React.useState<number>(0)
-  const handleKeyDown = ({ key, code }: KeyboardEvent) => {
-    console.log(`key=${key}, code=${code}`)
-    if (!enable || !keyIsAllow(code)) return
-    switch (key) {
-      case 'Backspace':
-        setTyped((prev) => prev.slice(0, -1))
-        setIndex((prev) => prev - 1)
-        break
-      default:
-        setTyped((prev) => prev + key)
-        setIndex((prev) => prev + 1)
-    }
-  }
-  const clearTyping = () => {
-    setTyped('')
-    setIndex(0)
-  }
+  const totalTypedRef = useRef<number>(0)
+
+  const handleKeyDown = useCallback(
+    ({ key, code }: KeyboardEvent) => {
+      console.log(`key=${key}, code=${code}`)
+      if (!enable || !keyIsAllow(code)) return
+      switch (key) {
+        case 'Backspace':
+          setTyped((prev) => prev.slice(0, -1))
+          totalTypedRef.current -= 1
+          break
+        default:
+          setTyped((prev) => prev + key)
+          totalTypedRef.current += 1
+      }
+    },
+    [enable],
+  )
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown)
@@ -42,7 +43,23 @@ const useTyping = (
       window.removeEventListener('keydown', handleKeyDown)
     }
   }, [])
-  return { typed, index, setIndex }
+
+  const isEnableTyping = (enable: boolean) => {
+    if (enable) {
+      window.addEventListener('keydown', handleKeyDown)
+    } else {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }
+  const clearTyped = () => {
+    setTyped('')
+  }
+  return {
+    typed,
+    isEnableTyping,
+    clearTyped,
+    totalTyped: totalTypedRef.current,
+  }
 }
 
 export default useTyping

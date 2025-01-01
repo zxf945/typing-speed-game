@@ -5,4 +5,10 @@ const countErrors = (typed: string, words: string) =>
     .split('')
     .reduce((count, char, i) => count + (char !== words[i] ? 1 : 0), 0)
 
-export { formatPercentage, countErrors }
+// 计算正确率
+const accuracyPercent = (correct: number, total: number) => {
+  if (total === 0) return 0
+  return formatPercentage((correct / total) * 100)
+}
+
+export { formatPercentage, countErrors, accuracyPercent }

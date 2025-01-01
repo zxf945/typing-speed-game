@@ -1,10 +1,11 @@
 import { motion } from 'motion/react'
+import { accuracyPercent } from '../utils/helpers'
 const Result: React.FC<{
   className?: string
-  accuracyPercent: string
   errors: number
   typed: number
-}> = ({ className, accuracyPercent, errors, typed }) => {
+  total?: number
+}> = ({ className, errors, typed, total }) => {
   const initial = {
     opacity: 0,
   }
@@ -27,7 +28,7 @@ const Result: React.FC<{
         animate={animate}
         transition={{ ...transition, delay: 0.2 }}
       >
-        Accuracy:{accuracyPercent}
+        Accuracy:{accuracyPercent(typed - errors, typed)}
       </motion.li>
       <motion.li
         className="text-red-500"
