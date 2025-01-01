@@ -8,6 +8,7 @@ const RestartButton: React.FC<{
     e.currentTarget.blur()
     handleRestart()
   }
+
   return (
     <button
       className={`block rounded px-8 py-2 text-primary-500 hover:bg-slate-700/50 ${className}`}
