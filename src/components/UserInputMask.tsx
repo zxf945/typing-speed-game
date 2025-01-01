@@ -1,19 +1,10 @@
-import { motion } from 'motion/react'
+import useSound from 'use-sound'
+import Caret from './Caret'
+import keyboardStroke from '../assets/keyboard_stroke.wav'
+import typingError from '../assets/typing-error.wav'
 
-const Caret: React.FC = () => {
-  return (
-    <motion.span
-      className="inline-block h-6 w-0.5 bg-yellow-500"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ repeat: Infinity, duration: 0.8, ease: 'easeInOut' }}
-    ></motion.span>
-  )
-}
-const getCharacterClass = (input: string, expected: string): string => {
-  if (expected === ' ') return 'bg-red-400'
-  return input === expected ? 'text-green-500' : 'text-red-500'
-}
+import { useEffect } from 'react'
+
 const UserInputMask: React.FC<{
   className?: string
   value: string
@@ -22,16 +13,51 @@ const UserInputMask: React.FC<{
   return (
     <div className={`${className} text-break`}>
       {value.split('').map((input, index) => (
-        <span
-          key={`${input}-${index}`}
-          className={getCharacterClass(input, expected[index])}
-        >
-          {expected[index]}
-        </span>
+        <Character actual={input} expected={expected[index]} />
       ))}
       <Caret />
     </div>
   )
+}
+
+const Character = ({
+  actual,
+  expected,
+}: {
+  actual: string
+  expected: string
+}) => {
+  const isCorrect = actual === expected
+  const isWhiteSpace = expected === ' '
+  const [playStroke] = useSound(keyboardStroke, { volume: 0.5 })
+  const [playError] = useSound(typingError, { volume: 0.5 })
+  useEffect(() => {
+    if (isCorrect) {
+      playStroke()
+    } else {
+      playError()
+    }
+  }, [playStroke, playError, isCorrect])
+  return (
+    <span
+      className={cn({
+        'text-red-500': !isCorrect && !isWhiteSpace,
+        'text-green-500': isCorrect && !isWhiteSpace,
+        'bg-red-500/50': !isCorrect && isWhiteSpace,
+        'dark:text-red-500': !isCorrect && !isWhiteSpace,
+        'dark:text-primary-500': isCorrect && !isWhiteSpace,
+        'dark:bg-red-500/50': !isCorrect && isWhiteSpace,
+      })}
+    >
+      {expected}
+    </span>
+  )
+}
+const cn = (classes: { [key: string]: boolean }) => {
+  return Object.entries(classes)
+    .filter(([, value]) => value)
+    .map(([key]) => key)
+    .join(' ')
 }
 
 export default UserInputMask
