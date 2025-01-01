@@ -11,12 +11,14 @@ import ModeSwitchButton from './components/ModeSwitchButton'
 import useCountTimer from './hooks/useCountTimer'
 import useTyping from './hooks/useTyping'
 import { useEffect } from 'react'
+import { Toaster } from 'react-hot-toast'
 
 const NUMBER_OF_WORDS = 10
+const NUMBER_OF_TIMER = 30
 
 export default function App() {
   const { words, updateWords } = useWords(NUMBER_OF_WORDS)
-  const { leftTime, resetTimer } = useCountTimer(10)
+  const { leftTime, resetTimer } = useCountTimer(NUMBER_OF_TIMER)
   const { typed, isEnableTyping, clearTyped, totalTyped } = useTyping()
   // useEffect(() => {
   //   console.log('===111')
@@ -32,6 +34,7 @@ export default function App() {
   }, [typed, leftTime])
   return (
     <div className="relative flex min-h-screen flex-col justify-center">
+      <Toaster />
       <ModeSwitchButton className="absolute right-4 top-4" />
       <CountDonwTimer timeLeft={leftTime} />
       <div className="relative text-4xl">
