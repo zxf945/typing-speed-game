@@ -20,9 +20,6 @@ export default function App() {
   const { words, updateWords } = useWords(NUMBER_OF_WORDS)
   const { leftTime, resetTimer } = useCountTimer(NUMBER_OF_TIMER)
   const { typed, isEnableTyping, clearTyped, totalTyped } = useTyping()
-  // useEffect(() => {
-  //   console.log('===111')
-  // }, [])
   useEffect(() => {
     if (typed.length === words.length) {
       clearTyped()
@@ -31,11 +28,18 @@ export default function App() {
     if (leftTime === 0) {
       isEnableTyping(false)
     }
-  }, [typed, leftTime])
+  }, [
+    leftTime,
+    words.length,
+    clearTyped,
+    updateWords,
+    isEnableTyping,
+    typed.length,
+  ])
   return (
     <div className="relative flex min-h-screen flex-col justify-center">
       <Toaster />
-      <ModeSwitchButton className="absolute right-4 top-4" />
+      <ModeSwitchButton className="absolute top-4 right-4" />
       <CountDonwTimer timeLeft={leftTime} />
       <div className="relative text-4xl">
         <Words words={words} />

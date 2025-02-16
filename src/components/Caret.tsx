@@ -1,5 +1,5 @@
 import { motion } from 'motion/react'
-export default () => {
+const caret = () => {
   return (
     <motion.span
       className="inline-block h-6 w-0.5 bg-yellow-500"
@@ -9,3 +9,4 @@ export default () => {
     ></motion.span>
   )
 }
+export default caret

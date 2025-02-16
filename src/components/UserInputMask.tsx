@@ -13,7 +13,7 @@ const UserInputMask: React.FC<{
   return (
     <div className={`${className} text-break`}>
       {value.split('').map((input, index) => (
-        <Character actual={input} expected={expected[index]} />
+        <Character actual={input} expected={expected[index]} key={index} />
       ))}
       <Caret />
     </div>

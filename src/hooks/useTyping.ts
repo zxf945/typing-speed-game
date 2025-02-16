@@ -42,7 +42,7 @@ const useTyping = (
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [])
+  }, [handleKeyDown])
 
   const isEnableTyping = (enable: boolean) => {
     if (enable) {
