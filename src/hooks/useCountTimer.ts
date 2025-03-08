@@ -6,6 +6,7 @@ const useCountTimer = (
   leftTime: number
   resetTimer: () => void
   startTimer: () => void
+  clearTimer: () => void
 } => {
   const [leftTime, setLeftTime] = useState(initialCount)
   // 组件中共享数据
@@ -32,14 +33,17 @@ const useCountTimer = (
   }, [leftTime])
 
   const resetTimer = () => {
+    clearTimer()
+    setLeftTime(initialCount)
+    startTimer()
+  }
+  const clearTimer = () => {
     if (timerRef.current) {
       clearInterval(timerRef.current)
       timerRef.current = undefined
     }
-    setLeftTime(initialCount)
-    startTimer()
   }
 
-  return { leftTime, resetTimer, startTimer }
+  return { leftTime, resetTimer, startTimer, clearTimer }
 }
 export default useCountTimer

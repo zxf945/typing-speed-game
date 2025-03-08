@@ -11,34 +11,42 @@ import ModeSwitchButton from './components/ModeSwitchButton'
 import useCountTimer from './hooks/useCountTimer'
 import useTyping from './hooks/useTyping'
 import { memo, useEffect } from 'react'
-import { Toaster } from 'react-hot-toast'
+import { Toaster, toast } from 'react-hot-toast'
 
 const NUMBER_OF_WORDS = 10
-const NUMBER_OF_TIMER = 30
+const NUMBER_OF_TIMER = 10
 
 const App = () => {
   const { words, updateWords } = useWords(NUMBER_OF_WORDS)
-  const { leftTime, resetTimer } = useCountTimer(NUMBER_OF_TIMER)
+  const { leftTime, resetTimer, clearTimer } = useCountTimer(NUMBER_OF_TIMER)
   const { typed, isEnableTyping, clearTyped, totalTyped } = useTyping()
   useEffect(() => {
     if (typed.length === words.length) {
       clearTyped()
       updateWords()
     }
+  }, [words.length, clearTyped, updateWords, typed.length])
+  useEffect(() => {
     if (leftTime === 0) {
       isEnableTyping(false)
+      toast('game over')
+      clearTimer()
     }
-  }, [
-    leftTime,
-    words.length,
-    clearTyped,
-    updateWords,
-    isEnableTyping,
-    typed.length,
-  ])
+  }, [isEnableTyping, leftTime, clearTimer])
   return (
     <div className="relative flex min-h-screen flex-col justify-center">
-      <Toaster />
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        gutter={8}
+        toastOptions={{
+          duration: 5000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+          },
+        }}
+      />
       <ModeSwitchButton className="absolute top-4 right-4" />
       <CountDonwTimer timeLeft={leftTime} />
       <div className="relative text-4xl">
@@ -49,7 +57,6 @@ const App = () => {
           expected={words}
         />
       </div>
-
       <RestartButton
         className="align-center mx-auto mt-10"
         onRestart={() => {
